@@ -11,7 +11,7 @@ process.on('SIGINT', () => {
   process.exit(0);
 });
 
-// Start the server
+// Start server
 startServer().catch((error) => {
   console.error('Failed to start server:', error);
   process.exit(1);

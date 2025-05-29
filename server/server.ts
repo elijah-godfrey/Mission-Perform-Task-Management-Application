@@ -34,7 +34,7 @@ app.get('/health', async (req, res) => {
       database: dbStatus,
       message: 'Task Management API is running!'
     });
-  } catch (error) {
+  } catch (err) {
     res.status(503).json({
       status: 'error',
       timestamp: new Date().toISOString(),
