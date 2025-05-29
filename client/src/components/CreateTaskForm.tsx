@@ -1,10 +1,10 @@
 import type React from "react"
 import { useState } from "react"
 import { tasksAPI } from "../services/api"
-import type { CreateTaskData } from "../services/api"
+import type { CreateTaskData, Task } from "../services/api"
 
 interface CreateTaskFormProps {
-  onTaskCreated?: (task: any) => void
+  onTaskCreated?: (task: Task) => void
   onCancel?: () => void
 }
 
@@ -30,7 +30,7 @@ export const CreateTaskForm = ({ onTaskCreated, onCancel }: CreateTaskFormProps)
       const taskData: CreateTaskData = {
         title: title.trim(),
         description: description.trim() || undefined,
-        status
+        status: status
       }
 
       const newTask = await tasksAPI.create(taskData)
@@ -40,7 +40,6 @@ export const CreateTaskForm = ({ onTaskCreated, onCancel }: CreateTaskFormProps)
       setDescription("")
       setStatus("To Do")
       
-      // Notify parent component
       if (onTaskCreated) {
         onTaskCreated(newTask)
       }
