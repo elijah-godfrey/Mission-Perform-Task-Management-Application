@@ -5,10 +5,8 @@ export const Dashboard = () => {
   const { user } = useAuth()
 
   return (
-    <div>
+    <div className="min-h-screen bg-gray-100">
       <Navbar />
-      {/* Dashboard implementation coming in next commit */}
-      <h1>Dashboard - {user?.username}</h1>
     </div>
   )
 }
