@@ -13,6 +13,7 @@ export const RegisterForm = ({ onSwitchToLogin }: RegisterFormProps) => {
   const { register, isLoading, error } = useAuth()
 
   const handleSubmit = async (e: FormEvent) => {
+    // Stops page from reloading
     e.preventDefault()
     
     if (password !== confirmPassword) {
@@ -104,6 +105,7 @@ export const RegisterForm = ({ onSwitchToLogin }: RegisterFormProps) => {
             </div>
           )}
 
+          {/* Add a warning if the passwords do not match */}
           {password !== confirmPassword && confirmPassword && (
             <div className="text-warning-500 text-sm font-medium bg-warning-50 border border-warning-200 rounded-md p-3 animate-slide-up">
               Passwords do not match
