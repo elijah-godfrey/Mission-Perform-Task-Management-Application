@@ -15,15 +15,20 @@ interface AuthContextType {
   clearError: () => void;
 }
 
+// Create the AuthContext to provide auth related data to the app
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Define the AuthProvider props
 interface AuthProviderProps {
   children: ReactNode;
 }
 
+// Wrapper component to provide auth context to the app
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
+  // JWT token
   const [token, setToken] = useState<string | null>(null);
+  // Used to show a loading state while the auth state is being initialized
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -31,15 +36,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   useEffect(() => {
     const initializeAuth = () => {
       try {
+        // Checks if there is a saved token and user in localStorage
         const savedToken = localStorage.getItem('token');
         const savedUser = localStorage.getItem('user');
 
         if (savedToken && savedUser) {
+          // If there is, set the token and user in state
           setToken(savedToken);
           setUser(JSON.parse(savedUser));
         }
-      } catch (error) {
-        console.error('Error initializing auth:', error);
+      } catch (err) {
+        console.error('Error initializing auth:', err);
         // Clear corrupted data
         localStorage.removeItem('token');
         localStorage.removeItem('user');
@@ -74,6 +81,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
+  // Similar functionality to login, but calls the /register endpoint instead
   const register = async (username: string, email: string, password: string): Promise<void> => {
     try {
       setIsLoading(true);
@@ -112,6 +120,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setError(null);
   };
 
+  // Provides the auth context to the app and all child components
   const value: AuthContextType = {
     user,
     token,
@@ -131,6 +140,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   );
 };
 
+// Lets components access the auth context
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (context === undefined) {

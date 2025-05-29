@@ -4,7 +4,7 @@
   "type": "module",
   "main": "index.ts",
   "scripts": {
-    "dev": "nodemon --loader ts-node/esm index.ts",
+    "dev": "nodemon index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -30,6 +30,7 @@
     "@types/node": "^22.15.23",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
+    "tsx": "^4.19.4",
     "typescript": "^5.8.3"
   }
 }
