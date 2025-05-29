@@ -3,6 +3,7 @@ import { useState } from "react";
 import { tasksAPI } from "../services/api";
 import type { Task } from "../services/api";
 import { ActionButton } from "./ActionButton";
+import { EditTaskModal } from "./EditTaskModal";
 // import { UpdateTaskStatus } from "./UpdateTaskStatus"; // Not used currently
 
 interface TaskItemProps {
@@ -17,7 +18,7 @@ export const TaskItem = ({ task, onTaskDeleted, onTaskUpdated }: TaskItemProps) 
   const [isDeleting, setIsDeleting] = useState(false);
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  // const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false); // Remains commented out
+  const [showEditModal, setShowEditModal] = useState(false);
 
   const handleDelete = async () => {
     if (window.confirm(`Are you sure you want to delete task: "${task.title}"?`)) {
@@ -104,7 +105,7 @@ export const TaskItem = ({ task, onTaskDeleted, onTaskUpdated }: TaskItemProps) 
 
         <div className="flex items-center space-x-3">
           <ActionButton
-            onClick={() => { /* TODO: Handle edit task - potentially open a modal */ }}
+            onClick={() => setShowEditModal(true)}
             variant="edit"
             disabled={isDeleting || isUpdatingStatus}
           >
@@ -122,17 +123,16 @@ export const TaskItem = ({ task, onTaskDeleted, onTaskUpdated }: TaskItemProps) 
         </div>
       </div>
       
-      {/* Modal placeholder remains commented out */}
-      {/* {showUpdateStatusModal && (
-        <UpdateTaskStatus 
+      {showEditModal && (
+        <EditTaskModal
           task={task}
-          onClose={() => setShowUpdateStatusModal(false)} 
-          onStatusUpdated={(updatedTaskWithNewStatus) => {
-            onTaskUpdated(updatedTaskWithNewStatus);
-            setShowUpdateStatusModal(false);
+          onClose={() => setShowEditModal(false)}
+          onTaskUpdated={(updatedTask) => {
+            onTaskUpdated(updatedTask);
+            setShowEditModal(false);
           }}
         />
-      )} */}
+      )}
     </div>
   );
 }; 
