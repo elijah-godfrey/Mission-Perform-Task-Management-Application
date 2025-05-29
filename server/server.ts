@@ -10,9 +10,22 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-// CORS configuration
+// Updated CORS configuration for Vercel
+const allowedOrigins = [
+  'http://localhost:5173', // For local dev
+  process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined,
+  process.env.CLIENT_URL // Keep existing CLIENT_URL if set for other environments
+].filter(Boolean) as string[]; // Type assertion to string[] after filtering
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.warn(`CORS: Origin ${origin} not allowed. Allowed origins: ${allowedOrigins.join(', ')}`);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 
@@ -58,16 +71,22 @@ const connectDB = async () => {
         console.log('MongoDB connected successfully');
     } catch (err) {
         console.error('MongoDB connection error:', err);
-        process.exit(1);
+        process.exit(1); // Exit if DB connection fails during startup
     }
 };
 
-const startServer = async () => {
-    await connectDB();
+// Connect to DB when the module is loaded in serverless environment
+// or before starting server in local environment.
+connectDB(); 
+
+// Conditionally start server for local development
+if (process.env.NODE_ENV !== 'production') { // Vercel sets NODE_ENV to 'production'
     app.listen(port, () => {
         console.log(`Server is running on port ${port}`);
+        console.log(`Client URL for CORS: ${process.env.CLIENT_URL || 'http://localhost:5173'}`);
+        console.log(`VERCEL_URL for CORS (if deployed): ${process.env.VERCEL_URL}`);
         console.log(`Health check available at http://localhost:${port}/health`);
     });
-};
+}
 
-export { startServer }; 
+export default app; // Export app for Vercel 
