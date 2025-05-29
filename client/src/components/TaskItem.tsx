@@ -85,21 +85,24 @@ export const TaskItem = ({ task, onTaskDeleted, onTaskUpdated }: TaskItemProps) 
       )}
       
       {/* Action Buttons Section */}
-      <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-200">
+      <div className="flex items-center justify-between mt-6 pt-6 border-t border-gray-200">
         <div className="flex items-center">
-          <select 
-            value={task.status}
-            onChange={(e) => handleStatusChange(e.target.value as "To Do" | "In Progress" | "Done")}
-            disabled={isUpdatingStatus || isDeleting}
-            className="text-sm p-2 rounded-md bg-white border border-gray-300 text-gray-900 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <option value="To Do" className="bg-white text-gray-900 py-1">To Do</option>
-            <option value="In Progress" className="bg-white text-gray-900 py-1">In Progress</option>
-            <option value="Done" className="bg-white text-gray-900 py-1">Done</option>
-          </select>
+          <div className="mr-4">
+            <label className="block text-xs font-medium text-gray-600 mb-1">Status</label>
+            <select 
+              value={task.status}
+              onChange={(e) => handleStatusChange(e.target.value as "To Do" | "In Progress" | "Done")}
+              disabled={isUpdatingStatus || isDeleting}
+              className="text-sm px-4 py-2.5 rounded-md bg-white border border-gray-300 text-gray-900 focus:border-primary-500 focus:ring-2 focus:ring-primary-500 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed min-w-[130px] shadow-sm"
+            >
+              <option value="To Do" className="bg-white text-gray-900 py-1">To Do</option>
+              <option value="In Progress" className="bg-white text-gray-900 py-1">In Progress</option>
+              <option value="Done" className="bg-white text-gray-900 py-1">Done</option>
+            </select>
+          </div>
         </div>
 
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-4">
           {/* Edit Button */}
           <ActionButton
             onClick={() => setShowEditModal(true)}
