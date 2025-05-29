@@ -21,10 +21,13 @@ function AppContent() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-dark-900 via-dark-800 to-primary-900">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading...</p>
+          <div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-gradient-to-r from-primary-500 to-secondary-500 text-white text-2xl font-bold mb-4">
+            T
+          </div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mt-6"></div>
+          <p className="mt-4 text-white">Loading...</p>
         </div>
       </div>
     );

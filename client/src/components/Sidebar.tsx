@@ -1,9 +1,14 @@
-const Sidebar = () => {
+import { useAuth } from "../contexts/AuthContext"
+
+export const Sidebar = () => {
+  const { user, logout } = useAuth()
+
   return (
     <div>
-      {/* Sidebar component */}
+      {/* Your new sidebar design goes here */}
+      <h2>Sidebar</h2>
+      <p>Welcome, {user?.username}</p>
+      <button onClick={logout}>Logout</button>
     </div>
-  );
-};
-
-export default Sidebar; 
+  )
+} 
