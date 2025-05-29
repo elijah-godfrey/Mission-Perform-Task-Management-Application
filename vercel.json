@@ -3,21 +3,14 @@
   "buildCommand": "cd client && npm install && npm run build",
   "outputDirectory": "client/dist",
   "framework": null,
-  "installCommand": "npm install --prefix client && npm install --prefix server",
-  "functions": {
-    "server/index.ts": {
-      "runtime": "@vercel/node@3.0.0",
-      "includeFiles": "server/**"
-    }
-  },
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/server/index.ts"
+      "destination": "/api/index"
     },
     {
       "source": "/(.*)",
-      "destination": "/index.html"
+      "destination": "/$1"
     }
   ]
 } 
