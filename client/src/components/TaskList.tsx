@@ -1,5 +1,4 @@
-import type React from "react";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { tasksAPI } from "../services/api";
 import type { Task } from "../services/api";
 import { TaskItem } from "./TaskItem";

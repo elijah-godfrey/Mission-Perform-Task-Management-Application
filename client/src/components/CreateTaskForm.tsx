@@ -1,8 +1,7 @@
-import type React from "react"
-import { useState } from "react"
-import { tasksAPI } from "../services/api"
-import type { CreateTaskData, Task } from "../services/api"
-import { TaskForm } from "./TaskForm"
+import { useState } from "react";
+import { tasksAPI } from "../services/api";
+import type { CreateTaskData, Task } from "../services/api";
+import { TaskForm } from "./TaskForm";
 
 interface CreateTaskFormProps {
   onTaskCreated?: (task: Task) => void

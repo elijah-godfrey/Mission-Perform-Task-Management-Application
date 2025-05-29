@@ -1,7 +1,7 @@
-import type React from "react";
+import type { ReactNode } from "react";
 
 interface ActionButtonProps {
-  children: React.ReactNode;
+  children: ReactNode;
   onClick: () => void;
   disabled?: boolean;
   variant: "edit" | "delete";

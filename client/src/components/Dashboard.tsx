@@ -1,15 +1,12 @@
 import { useState } from "react";
-import { useAuth } from "../contexts/AuthContext"
 import { Navbar } from "./Navbar"
 import { CreateTaskForm } from "./CreateTaskForm"
 import { TaskList } from "./TaskList"
 
 export const Dashboard = () => {
-  const { user } = useAuth()
   const [refreshTaskList, setRefreshTaskList] = useState(0);
 
-  const handleTaskCreated = (newTask: any) => {
-    console.log('New task created in Dashboard:', newTask);
+  const handleTaskCreated = () => {
     setRefreshTaskList(prev => prev + 1); // Trigger TaskList refresh
   }
 

@@ -1,10 +1,8 @@
-import type React from "react";
 import { useState } from "react";
 import { tasksAPI } from "../services/api";
 import type { Task } from "../services/api";
 import { ActionButton } from "./ActionButton";
 import { EditTaskModal } from "./EditTaskModal";
-// import { UpdateTaskStatus } from "./UpdateTaskStatus"; // Not used currently
 
 interface TaskItemProps {
   task: Task;
@@ -68,7 +66,7 @@ export const TaskItem = ({ task, onTaskDeleted, onTaskUpdated }: TaskItemProps) 
         <div className="flex-grow">
           <h3 className="text-xl font-semibold text-primary-700 mb-1 break-all">{task.title}</h3>
           <p className="text-sm text-gray-500">
-            {new Date(task.createdAt).toLocaleDateString()} {/* Date format kept as just date */}
+            {new Date(task.createdAt).toLocaleDateString()}
           </p>
         </div>
         <span
@@ -88,7 +86,7 @@ export const TaskItem = ({ task, onTaskDeleted, onTaskUpdated }: TaskItemProps) 
         </div>
       )}
       
-      {/* Action Buttons Section - Reverted to select dropdown for status */}
+      {/* Action Buttons Section */}
       <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-200">
         <div className="flex items-center">
           <select 

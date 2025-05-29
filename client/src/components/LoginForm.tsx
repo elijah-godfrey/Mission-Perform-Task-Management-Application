@@ -1,21 +1,22 @@
-import type React from "react"
-import { useState } from "react"
-import { useAuth } from "../contexts/AuthContext"
+import { useState, type FormEvent } from "react";
+import { useAuth } from "../contexts/AuthContext";
 
 interface LoginFormProps {
   onSwitchToRegister: () => void
 }
 
 export const LoginForm = ({ onSwitchToRegister }: LoginFormProps) => {
-  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [rememberMe, setRememberMe] = useState(false)
   const { login, isLoading, error } = useAuth()
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // Handle form submission
+  const handleSubmit = async (e: FormEvent) => {
+    // Stops page from reloading
     e.preventDefault()
     try {
-      await login(username, password)
+      await login(email, password, rememberMe)
     } catch (err) {
       // Error is handled by the context
     }
@@ -30,15 +31,15 @@ export const LoginForm = ({ onSwitchToRegister }: LoginFormProps) => {
 
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-2">
-            <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-              Your username
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              Your email
             </label>
             <input
-              id="username"
-              type="text"
-              placeholder="Enter your username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              id="email"
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
               className="w-full h-12 px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
             />

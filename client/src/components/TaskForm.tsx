@@ -1,5 +1,4 @@
-import type React from "react";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import type { Task, CreateTaskData, UpdateTaskData } from "../services/api";
 
 interface TaskFormProps {
@@ -26,7 +25,7 @@ export const TaskForm = ({
   );
   const [formError, setFormError] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     
     if (!title.trim()) {

@@ -8,7 +8,7 @@ interface AuthContextType {
   token: string | null;
   isLoading: boolean;
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string, rememberMe?: boolean) => Promise<void>;
   register: (username: string, email: string, password: string) => Promise<void>;
   logout: () => void;
   error: string | null;
@@ -32,13 +32,19 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Initialize auth state from localStorage
+  // Initialize auth state from localStorage or sessionStorage
   useEffect(() => {
     const initializeAuth = () => {
       try {
-        // Checks if there is a saved token and user in localStorage
-        const savedToken = localStorage.getItem('token');
-        const savedUser = localStorage.getItem('user');
+        // Check localStorage first (remember me = true)
+        let savedToken = localStorage.getItem('token');
+        let savedUser = localStorage.getItem('user');
+        
+        // If not in localStorage, check sessionStorage (remember me = false)
+        if (!savedToken || !savedUser) {
+          savedToken = sessionStorage.getItem('token');
+          savedUser = sessionStorage.getItem('user');
+        }
 
         if (savedToken && savedUser) {
           // If there is, set the token and user in state
@@ -47,9 +53,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         }
       } catch (err) {
         console.error('Error initializing auth:', err);
-        // Clear corrupted data
+        // Clear corrupted data from both storages
         localStorage.removeItem('token');
         localStorage.removeItem('user');
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('user');
       } finally {
         setIsLoading(false);
       }
@@ -58,7 +66,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     initializeAuth();
   }, []);
 
-  const login = async (email: string, password: string): Promise<void> => {
+  const login = async (email: string, password: string, rememberMe = false): Promise<void> => {
     try {
       setIsLoading(true);
       setError(null);
@@ -69,9 +77,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setToken(response.token);
       setUser(response.user);
       
-      // Save to localStorage for persistence
-      localStorage.setItem('token', response.token);
-      localStorage.setItem('user', JSON.stringify(response.user));
+      // Choose storage based on rememberMe preference
+      const storage = rememberMe ? localStorage : sessionStorage;
+      
+      // Clear the other storage to avoid conflicts
+      const otherStorage = rememberMe ? sessionStorage : localStorage;
+      otherStorage.removeItem('token');
+      otherStorage.removeItem('user');
+      
+      // Save to chosen storage for persistence
+      storage.setItem('token', response.token);
+      storage.setItem('user', JSON.stringify(response.user));
     } catch (err: any) {
       const errorMessage = err.response?.data?.message || 'Login failed. Please try again.';
       setError(errorMessage);
@@ -111,9 +127,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setToken(null);
     setError(null);
     
-    // Clear localStorage
+    // Clear both storages
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('user');
   };
 
   const clearError = (): void => {

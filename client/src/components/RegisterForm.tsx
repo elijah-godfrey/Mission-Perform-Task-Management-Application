@@ -1,6 +1,5 @@
-import type React from "react"
-import { useState } from "react"
-import { useAuth } from "../contexts/AuthContext"
+import { useState, type FormEvent } from "react";
+import { useAuth } from "../contexts/AuthContext";
 
 interface RegisterFormProps {
   onSwitchToLogin: () => void
@@ -13,7 +12,7 @@ export const RegisterForm = ({ onSwitchToLogin }: RegisterFormProps) => {
   const [confirmPassword, setConfirmPassword] = useState("")
   const { register, isLoading, error } = useAuth()
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     
     if (password !== confirmPassword) {

@@ -1,5 +1,4 @@
-import type React from "react";
-import { useState } from "react";
+import { useState, type MouseEvent } from "react";
 import { tasksAPI } from "../services/api";
 import type { Task, UpdateTaskData } from "../services/api";
 import { TaskForm } from "./TaskForm";
@@ -31,7 +30,7 @@ export const EditTaskModal = ({ task, onClose, onTaskUpdated }: EditTaskModalPro
     }
   };
 
-  const handleBackdropClick = (e: React.MouseEvent) => {
+  const handleBackdropClick = (e: MouseEvent) => {
     if (e.target === e.currentTarget) {
       onClose();
     }
