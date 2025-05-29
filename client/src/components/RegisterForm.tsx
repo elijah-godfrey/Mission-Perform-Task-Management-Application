@@ -12,6 +12,15 @@ export const RegisterForm = ({ onSwitchToLogin }: RegisterFormProps) => {
   const [confirmPassword, setConfirmPassword] = useState("")
   const { register, isLoading, error } = useAuth()
 
+  // Helper functions to check validation requirements in real-time
+  const isUsernameValid = (username: string) => {
+    return username.length >= 3 && username.length <= 30 && /^[a-zA-Z0-9_]+$/.test(username);
+  };
+
+  const isPasswordValid = (password: string) => {
+    return password.length >= 5 && /^(?=.*[a-zA-Z])(?=.*\d)/.test(password);
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     // Stops page from reloading
     e.preventDefault()
@@ -50,8 +59,32 @@ export const RegisterForm = ({ onSwitchToLogin }: RegisterFormProps) => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
-              className="w-full h-12 px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
+              className={`w-full h-12 px-3 py-2 bg-gray-50 border rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 ${
+                username && !isUsernameValid(username) 
+                  ? 'border-error-300 bg-error-50' 
+                  : username && isUsernameValid(username)
+                  ? 'border-success-300 bg-success-50'
+                  : 'border-gray-200'
+              }`}
             />
+            <div className="text-xs text-gray-500 space-y-1">
+              <div className={`flex items-center space-x-1 ${
+                username && username.length >= 3 && username.length <= 30 ? 'text-success-600' : ''
+              }`}>
+                <span className={`w-1 h-1 rounded-full ${
+                  username && username.length >= 3 && username.length <= 30 ? 'bg-success-600' : 'bg-gray-300'
+                }`}></span>
+                <span>3-30 characters long</span>
+              </div>
+              <div className={`flex items-center space-x-1 ${
+                username && /^[a-zA-Z0-9_]+$/.test(username) ? 'text-success-600' : ''
+              }`}>
+                <span className={`w-1 h-1 rounded-full ${
+                  username && /^[a-zA-Z0-9_]+$/.test(username) ? 'bg-success-600' : 'bg-gray-300'
+                }`}></span>
+                <span>Only letters, numbers, and underscores</span>
+              </div>
+            </div>
           </div>
 
           <div className="space-y-2">
@@ -80,8 +113,40 @@ export const RegisterForm = ({ onSwitchToLogin }: RegisterFormProps) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full h-12 px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
+              className={`w-full h-12 px-3 py-2 bg-gray-50 border rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 ${
+                password && !isPasswordValid(password) 
+                  ? 'border-error-300 bg-error-50' 
+                  : password && isPasswordValid(password)
+                  ? 'border-success-300 bg-success-50'
+                  : 'border-gray-200'
+              }`}
             />
+            <div className="text-xs text-gray-500 space-y-1">
+              <div className={`flex items-center space-x-1 ${
+                password && password.length >= 5 ? 'text-success-600' : ''
+              }`}>
+                <span className={`w-1 h-1 rounded-full ${
+                  password && password.length >= 5 ? 'bg-success-600' : 'bg-gray-300'
+                }`}></span>
+                <span>At least 5 characters long</span>
+              </div>
+              <div className={`flex items-center space-x-1 ${
+                password && /(?=.*[a-zA-Z])/.test(password) ? 'text-success-600' : ''
+              }`}>
+                <span className={`w-1 h-1 rounded-full ${
+                  password && /(?=.*[a-zA-Z])/.test(password) ? 'bg-success-600' : 'bg-gray-300'
+                }`}></span>
+                <span>Contains at least one letter</span>
+              </div>
+              <div className={`flex items-center space-x-1 ${
+                password && /(?=.*\d)/.test(password) ? 'text-success-600' : ''
+              }`}>
+                <span className={`w-1 h-1 rounded-full ${
+                  password && /(?=.*\d)/.test(password) ? 'bg-success-600' : 'bg-gray-300'
+                }`}></span>
+                <span>Contains at least one number</span>
+              </div>
+            </div>
           </div>
 
           <div className="space-y-2">
@@ -95,7 +160,13 @@ export const RegisterForm = ({ onSwitchToLogin }: RegisterFormProps) => {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              className="w-full h-12 px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
+              className={`w-full h-12 px-3 py-2 bg-gray-50 border rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 ${
+                confirmPassword && password !== confirmPassword 
+                  ? 'border-error-300 bg-error-50' 
+                  : confirmPassword && password === confirmPassword && confirmPassword.length > 0
+                  ? 'border-success-300 bg-success-50'
+                  : 'border-gray-200'
+              }`}
             />
           </div>
 
@@ -114,7 +185,7 @@ export const RegisterForm = ({ onSwitchToLogin }: RegisterFormProps) => {
 
           <button
             type="submit"
-            disabled={isLoading || password !== confirmPassword}
+            disabled={isLoading || password !== confirmPassword || !isUsernameValid(username) || !isPasswordValid(password)}
             className="w-full h-12 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-glow"
           >
             {isLoading ? "Creating account..." : "Create account"}
