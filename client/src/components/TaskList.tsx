@@ -4,8 +4,7 @@ import type { Task } from "../services/api";
 import { TaskItem } from "./TaskItem";
 
 interface TaskListProps {
-  // Props to control filtering/sorting can be added later
-  refreshTrigger?: number; // Used to trigger a refresh from parent
+  refreshTrigger?: number;
 }
 
 export const TaskList = ({ refreshTrigger }: TaskListProps) => {
@@ -13,6 +12,7 @@ export const TaskList = ({ refreshTrigger }: TaskListProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Fetch the tasks when the component mounts
   useEffect(() => {
     const fetchTasks = async () => {
       setIsLoading(true);
@@ -65,6 +65,7 @@ export const TaskList = ({ refreshTrigger }: TaskListProps) => {
     );
   }
 
+  // Handle the case where there are no tasks
   if (tasks.length === 0) {
     return (
       <div className="text-center py-10 bg-gray-50 p-6 rounded-lg border border-gray-200">

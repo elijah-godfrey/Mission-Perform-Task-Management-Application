@@ -10,8 +10,6 @@ interface TaskItemProps {
   onTaskUpdated: (updatedTask: Task) => void;
 }
 
-// Removed STATUS_OPTIONS constant as we are reverting to a select dropdown
-
 export const TaskItem = ({ task, onTaskDeleted, onTaskUpdated }: TaskItemProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
@@ -19,21 +17,20 @@ export const TaskItem = ({ task, onTaskDeleted, onTaskUpdated }: TaskItemProps) 
   const [showEditModal, setShowEditModal] = useState(false);
 
   const handleDelete = async () => {
-    if (window.confirm(`Are you sure you want to delete task: "${task.title}"?`)) {
-      setIsDeleting(true);
-      setError(null);
-      try {
-        await tasksAPI.delete(task._id);
-        onTaskDeleted(task._id);
-      } catch (err: any) {
-        setError(err.response?.data?.message || "Failed to delete task.");
-      } finally {
-        setIsDeleting(false);
-      }
+    setIsDeleting(true);
+    setError(null);
+    try {
+      await tasksAPI.delete(task._id);
+      onTaskDeleted(task._id);
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Failed to delete task.");
+    } finally {
+      setIsDeleting(false);
     }
   };
 
   const handleStatusChange = async (newStatus: "To Do" | "In Progress" | "Done") => {
+    // If the status is the same, do nothing, otherwise update the status
     if (task.status === newStatus) return;
     setIsUpdatingStatus(true);
     setError(null);
@@ -47,6 +44,7 @@ export const TaskItem = ({ task, onTaskDeleted, onTaskUpdated }: TaskItemProps) 
     }
   };
   
+  // Get the color of the status
   const getStatusColor = (status: "To Do" | "In Progress" | "Done") => {
     switch (status) {
       case "To Do":
@@ -102,6 +100,7 @@ export const TaskItem = ({ task, onTaskDeleted, onTaskUpdated }: TaskItemProps) 
         </div>
 
         <div className="flex items-center space-x-3">
+          {/* Edit Button */}
           <ActionButton
             onClick={() => setShowEditModal(true)}
             variant="edit"
@@ -109,6 +108,7 @@ export const TaskItem = ({ task, onTaskDeleted, onTaskUpdated }: TaskItemProps) 
           >
             Edit
           </ActionButton>
+          {/* Delete Button */}
           <ActionButton
             onClick={handleDelete}
             variant="delete"

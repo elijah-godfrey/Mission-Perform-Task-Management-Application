@@ -1,10 +1,10 @@
 import { useState, type FormEvent } from "react";
-import type { Task, CreateTaskData, UpdateTaskData } from "../services/api";
+import type { Task } from "../services/api";
 
 interface TaskFormProps {
   mode: "create" | "edit";
-  task?: Task; // Only required for edit mode
-  onSubmit: (taskData: any) => Promise<void>; // More flexible type
+  task?: Task; // Only required for edit mode, not create mode
+  onSubmit: (taskData: any) => Promise<void>;
   onCancel?: () => void;
   isLoading?: boolean;
   error?: string | null;
@@ -28,11 +28,13 @@ export const TaskForm = ({
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     
+    // Check if the title is empty
     if (!title.trim()) {
       setFormError("Title is required");
       return;
     }
 
+    // Reset the form error
     setFormError(null);
 
     const taskData = {

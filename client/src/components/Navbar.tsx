@@ -2,6 +2,7 @@ import { useAuth } from "../contexts/AuthContext"
 import { LogoutButton } from "./LogoutButton"
 
 export const Navbar = () => {
+  // Get the user from the auth context
   const { user } = useAuth()
 
   return (
@@ -17,6 +18,7 @@ export const Navbar = () => {
               <div className="flex items-center space-x-2">
                 <div className="h-8 w-8 bg-primary-500 rounded-full flex items-center justify-center">
                   <span className="text-white text-sm font-medium">
+                    {/* Get the first letter of the username as an avatar */}
                     {user?.username?.charAt(0).toUpperCase()}
                   </span>
                 </div>
